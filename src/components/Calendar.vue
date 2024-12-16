@@ -8,8 +8,7 @@
       :event-color="getEventColor"
       :event-class="getEventClass"
       locale="fr"
-      :time="true"
-      hide-weekends
+      :time="true" hide-weekends
       :time-from="8 * 60"
       :time-top="19 * 60"
       :timeCellHeight="50"
@@ -77,7 +76,7 @@ export default defineComponent({
       try {
         const response = await fetch(this.icsFilePath);
         if (!response.ok) {
-          throw new Error(`Erreur lors du chargement du fichier : ${this.icsFilePath}`);
+          throw new Error(`Erreur lors du chargement du fichier : ${this.icsFilePath}. Code HTTP : ${response.status}`);
         }
         const icsContent = await response.text();
         this.parseICS(icsContent);
@@ -86,7 +85,7 @@ export default defineComponent({
         alert("Impossible de charger le fichier ICS. Vérifiez l'URL du fichier ou la disponibilité du serveur.");
       }
     },
-    parseICS(icsContent: string) {
+    parseICS(icsContent) {
       try {
         const jcalData = ICAL.parse(icsContent);
         const comp = new ICAL.Component(jcalData);
@@ -133,7 +132,6 @@ export default defineComponent({
         this.events = events;
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
-        alert("Erreur lors de l'analyse du fichier ICS. Le fichier peut être mal formaté.");
       }
     },
 
@@ -148,7 +146,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 html, body {
   height: 100%;
   margin: 0;
@@ -184,27 +182,27 @@ h1 {
 
 .vuecal__event.poo {
   background-color: #66FF66;
-  color: black
+  color: black;
 }
 
 .vuecal__event.anglais {
   background-color: #008080;
-  color: black
+  color: black;
 }
 
 .vuecal__event.base-de-donnees {
   background-color: #FFCC66;
-  color: black
+  color: black;
 }
 
 .vuecal__event.algorithmique-et-programmation-4 {
   background-color: #66CCFF;
-  color: black
+  color: black;
 }
 
 .vuecal__event.architecture-2 {
   background-color: #b52844;
-  color: black
+  color: black;
 }
 
 .vuecal__event.architecture-2-td1 {
@@ -214,22 +212,22 @@ h1 {
 
 .vuecal__event.sae-cpp_ctr-td1 {
   background-color: #FF6FCF;
-  color: black
+  color: black;
 }
 
 .vuecal__event.no-class {
   background-color: #f0f0f0;
-  color: black
+  color: black;
 }
 
 .vuecal__event.sae-projet-algo-4-tp-a {
   background-color: #CCFF66;
-  color: black
+  color: black;
 }
 
 .vuecal__event.algo-4-td1 {
   background-color: #66CCFF;
-  color: black
+  color: black;
 }
 
 .vuecal__event-content {
