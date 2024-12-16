@@ -1,13 +1,18 @@
 <template>
   <div class="calendar-container">
-    <h1>Calendrier des événements</h1>
+    <h1>Emploie du Temps</h1>
 
     <!-- Vue Cal -->
     <vue-cal
       :events="calendarEvents"
       :event-color="getEventColor"
+      :event-class="getEventClass"
       locale="fr"
-    />
+      :time="true" hide-weekends
+      :time-from="8 * 60"
+      :time-top="19 * 60"
+      :timeCellHeight = "50"
+    ></vue-cal>
   </div>
 </template>
 
@@ -30,16 +35,16 @@ export default defineComponent({
   data() {
     return {
       events: [],
-      // Liste des matières et des couleurs associées
       subjectColors: {
         "POO": '#66FF66',
         "Anglais": '#008080',
-        "Base de données": '#FFCC66',
+        "Base de donnees": '#FFCC66',
         "Algorithmique et Programmation 4": '#66CCFF',
         "SAE Projet Algo 4 TP-A": '#CCFF66',
-        "Architecture 2 TD1": "#CCCCCC",
-        "Architecture 2": "#CCCCCC",
+        "Architecture 2 TD1": "#b52844",
+        "Architecture 2": "#b52844",
         "SAE CPP_CTR TD1": "#FF6FCF",
+        "Algo 4 TD1": "#66CCFF",
       },
     };
   },
@@ -54,19 +59,19 @@ export default defineComponent({
           location: event.location,
           start: new Date(event.start),
           title: event.title,
+          class: event.class,
         };
 
-        console.log("Événement avec couleur:", eventData);
+        console.log("Événement avec couleur et classe:", eventData);
 
         return eventData;
       });
     },
   },
   mounted() {
-    this.loadICSFile(); // Chargement du fichier ICS
+    this.loadICSFile();
   },
   methods: {
-    // Charge le fichier ICS
     async loadICSFile() {
       try {
         const response = await fetch(this.icsFilePath);
@@ -74,74 +79,84 @@ export default defineComponent({
           throw new Error(`Erreur lors du chargement du fichier : ${this.icsFilePath}`);
         }
         const icsContent = await response.text();
-        this.parseICS(icsContent); // Analyse du fichier ICS
+        this.parseICS(icsContent);
       } catch (error) {
         console.error("Erreur lors du chargement ou de l’analyse du fichier ICS :", error);
       }
     },
-    // Analyse le contenu du fichier ICS
     parseICS(icsContent) {
       try {
-        const jcalData = ICAL.parse(icsContent); // Convertit le contenu ICS en données JCAL
-        const comp = new ICAL.Component(jcalData); // Crée le composant ICAL
-        const vevents = comp.getAllSubcomponents("vevent"); // Récupère tous les événements
+        const jcalData = ICAL.parse(icsContent);
+        const comp = new ICAL.Component(jcalData);
+        const vevents = comp.getAllSubcomponents("vevent");
 
         const events = vevents.map((vevent) => {
           const event = new ICAL.Event(vevent);
-          const start = event.startDate.toJSDate(); // Convertir directement en objet Date
-          const end = event.endDate.toJSDate(); // Convertir directement en objet Date
-          const location = event.location || ''; // Lieu
-          const title = event.summary || 'Événement sans titre'; // Titre de l'événement
+          const start = event.startDate.toJSDate();
+          const end = event.endDate.toJSDate();
+          const location = event.location || '';
+          const title = event.summary || 'Événement sans titre';
 
-          // Attribution de la couleur en fonction de la matière
-          let color = '#00B5E2'; // Couleur par défaut (si pas de correspondance)
+          let color = '#00B5E2';
+          let eventClass = '';
+          let matched = false;
+
           for (const subject in this.subjectColors) {
-            // Recherche sensible à la casse dans le titre
             if (title.toLowerCase().includes(subject.toLowerCase())) {
               color = this.subjectColors[subject];
+              eventClass = subject.toLowerCase().replace(/\s/g, '-');
+              matched = true;
               break;
             }
           }
 
-          console.log("Événement extrait :", { title, start, end, location, color });
+          if (!matched) {
+            eventClass = 'no-class';
+            color = '#00B5E2';
+          }
+
+          console.log("Événement extrait avec couleur et classe:", { title, start, end, location, color, eventClass });
 
           return {
-            title,   // Titre
-            start,   // Date de début (objet Date)
-            end,     // Date de fin (objet Date)
-            location, // Lieu
-            color,   // Couleur spécifique à la matière
+            title,
+            start,
+            end,
+            location,
+            color,
+            class: eventClass,
           };
         });
 
-        console.log("Événements extraits :", events);
-        this.events = events; // Mettre à jour les événements dans le data
+        console.log("Événements extraits avec couleurs et classes :", events);
+        this.events = events;
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
       }
     },
 
-    // Fonction pour obtenir la couleur de l'événement
     getEventColor(event) {
-      return event.color || '#00B5E2'; // Utiliser la couleur attribuée à l'événement
+      return event.color || '#00B5E2';
+    },
+
+    getEventClass(event) {
+      return event.class || 'no-class';
     },
   },
 });
 </script>
 
 <style>
-/* Assurez-vous que le calendrier occupe toute la fenêtre */
 html, body {
-  height: 100%; /* Garantit que le body et le html prennent toute la hauteur */
-  margin: 0;    /* Enlève les marges par défaut */
+  height: 100%;
+  margin: 0;
 }
 
 .calendar-container {
-  height: 100%; /* Prend toute la hauteur de l'écran */
+  height: 100%;
   display: flex;
-  flex-direction: column; /* Permet d'aligner les éléments de manière verticale */
-  justify-content: flex-start; /* Garantit que le contenu reste en haut */
-  padding: 0; /* Enlève les marges */
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -153,16 +168,71 @@ h1 {
 }
 
 .vue-cal {
-  flex-grow: 1; /* Prend toute la place restante dans le conteneur */
+  flex-grow: 1;
 }
 
-/* Augmenter la hauteur des lignes horaires */
-.vuecal .vuecal-time {
-  height: 60px; /* Ajustez cette valeur selon vos besoins */
+.vuecal__event-time {
+  height: 60px;
 }
 
-/* Optionnel : ajuster la taille des événements pour qu'ils s'adaptent mieux */
-.vuecal .vuecal-event {
-  height: 50px; /* Vous pouvez ajuster cette valeur pour modifier la taille des événements */
+.vuecal__event {
+  height: 50px;
 }
+
+.vuecal__event.poo {
+  background-color: #66FF66;
+  color: black
+}
+
+.vuecal__event.anglais {
+  background-color: #008080;
+  color: black
+}
+
+.vuecal__event.base-de-donnees {
+  background-color: #FFCC66;
+  color: black
+}
+
+.vuecal__event.algorithmique-et-programmation-4 {
+  background-color: #66CCFF;
+  color: black
+}
+
+.vuecal__event.architecture-2 {
+  background-color: #b52844;
+  color: black
+}
+
+.vuecal__event.architecture-2-td1 {
+  background-color: #b52844;
+  color: black;
+}
+
+.vuecal__event.sae-cpp_ctr-td1 {
+  background-color: #FF6FCF;
+  color: black
+}
+
+.vuecal__event.no-class {
+  background-color: #f0f0f0;
+  color: black
+}
+
+.vuecal__event.sae-projet-algo-4-tp-a {
+  background-color: #CCFF66;
+  color: black
+}
+
+.vuecal__event.algo-4-td1 {
+  background-color: #66CCFF;
+  color: black
+}
+
+.vuecal__event-content {
+  height: 100px;
+}
+
+
+
 </style>
