@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Calendar from './components/Calendar.vue';
 
 export default {
