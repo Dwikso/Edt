@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Calendar :icsFilePath="'/edt/ADECalGrpA.ics'" />
+    <Calendar :icsFilePath="'edt/ADECalGrpA.ics'" />
   </div>
 </template>
 
