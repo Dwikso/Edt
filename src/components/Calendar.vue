@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-container">
-    <h1>Emploie du Temps</h1>
+    <h1>Emploi du Temps</h1>
 
     <!-- Vue Cal -->
     <vue-cal
@@ -8,10 +8,11 @@
       :event-color="getEventColor"
       :event-class="getEventClass"
       locale="fr"
-      :time="true" hide-weekends
+      :time="true"
+      hide-weekends
       :time-from="8 * 60"
       :time-top="19 * 60"
-      :timeCellHeight = "50"
+      :timeCellHeight="50"
     ></vue-cal>
   </div>
 </template>
@@ -82,9 +83,10 @@ export default defineComponent({
         this.parseICS(icsContent);
       } catch (error) {
         console.error("Erreur lors du chargement ou de l’analyse du fichier ICS :", error);
+        alert("Impossible de charger le fichier ICS. Vérifiez l'URL du fichier ou la disponibilité du serveur.");
       }
     },
-    parseICS(icsContent) {
+    parseICS(icsContent: string) {
       try {
         const jcalData = ICAL.parse(icsContent);
         const comp = new ICAL.Component(jcalData);
@@ -131,6 +133,7 @@ export default defineComponent({
         this.events = events;
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
+        alert("Erreur lors de l'analyse du fichier ICS. Le fichier peut être mal formaté.");
       }
     },
 
@@ -145,7 +148,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 html, body {
   height: 100%;
   margin: 0;
@@ -232,7 +235,4 @@ h1 {
 .vuecal__event-content {
   height: 100px;
 }
-
-
-
 </style>
