@@ -11,18 +11,6 @@ importers:
       '@fullcalendar/core':
         specifier: ^6.1.15
         version: 6.1.15
-      '@fullcalendar/daygrid':
-        specifier: ^6.1.15
-        version: 6.1.15(@fullcalendar/core@6.1.15)
-      '@fullcalendar/interaction':
-        specifier: ^6.1.15
-        version: 6.1.15(@fullcalendar/core@6.1.15)
-      '@fullcalendar/timegrid':
-        specifier: ^6.1.15
-        version: 6.1.15(@fullcalendar/core@6.1.15)
-      '@fullcalendar/vue3':
-        specifier: ^6.1.15
-        version: 6.1.15(@fullcalendar/core@6.1.15)(vue@3.5.13(typescript@5.6.3))
       ical.js:
         specifier: ^2.1.0
         version: 2.1.0
@@ -580,27 +568,6 @@ packages:
 
   '@fullcalendar/core@6.1.15':
     resolution: {integrity: sha512-BuX7o6ALpLb84cMw1FCB9/cSgF4JbVO894cjJZ6kP74jzbUZNjtwffwRdA+Id8rrLjT30d/7TrkW90k4zbXB5Q==}
-
-  '@fullcalendar/daygrid@6.1.15':
-    resolution: {integrity: sha512-j8tL0HhfiVsdtOCLfzK2J0RtSkiad3BYYemwQKq512cx6btz6ZZ2RNc/hVnIxluuWFyvx5sXZwoeTJsFSFTEFA==}
-    peerDependencies:
-      '@fullcalendar/core': ~6.1.15
-
-  '@fullcalendar/interaction@6.1.15':
-    resolution: {integrity: sha512-DOTSkofizM7QItjgu7W68TvKKvN9PSEEvDJceyMbQDvlXHa7pm/WAVtAc6xSDZ9xmB1QramYoWGLHkCYbTW1rQ==}
-    peerDependencies:
-      '@fullcalendar/core': ~6.1.15
-
-  '@fullcalendar/timegrid@6.1.15':
-    resolution: {integrity: sha512-61ORr3A148RtxQ2FNG7JKvacyA/TEVZ7z6I+3E9Oeu3dqTf6M928bFcpehRTIK6zIA6Yifs7BeWHgOE9dFnpbw==}
-    peerDependencies:
-      '@fullcalendar/core': ~6.1.15
-
-  '@fullcalendar/vue3@6.1.15':
-    resolution: {integrity: sha512-ctfTICGrNEIj7gmLHQcUYe0WzDTSW5Vd9hyOnVChxPU75AZU9WqdDMkHwJYnfNxNhT6QQuiMHq/qsRRd5zQwOw==}
-    peerDependencies:
-      '@fullcalendar/core': ~6.1.15
-      vue: ^3.0.11
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3061,24 +3028,6 @@ snapshots:
   '@fullcalendar/core@6.1.15':
     dependencies:
       preact: 10.12.1
-
-  '@fullcalendar/daygrid@6.1.15(@fullcalendar/core@6.1.15)':
-    dependencies:
-      '@fullcalendar/core': 6.1.15
-
-  '@fullcalendar/interaction@6.1.15(@fullcalendar/core@6.1.15)':
-    dependencies:
-      '@fullcalendar/core': 6.1.15
-
-  '@fullcalendar/timegrid@6.1.15(@fullcalendar/core@6.1.15)':
-    dependencies:
-      '@fullcalendar/core': 6.1.15
-      '@fullcalendar/daygrid': 6.1.15(@fullcalendar/core@6.1.15)
-
-  '@fullcalendar/vue3@6.1.15(@fullcalendar/core@6.1.15)(vue@3.5.13(typescript@5.6.3))':
-    dependencies:
-      '@fullcalendar/core': 6.1.15
-      vue: 3.5.13(typescript@5.6.3)
 
   '@humanfs/core@0.19.1': {}
 
