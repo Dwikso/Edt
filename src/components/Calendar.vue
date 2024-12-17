@@ -12,6 +12,7 @@
       :time-cell-height="50"
       :disableViews="['years', 'year', 'month']"
       active-view="week"
+      :cell-content="cellContent"
     />
   </div>
 </template>
@@ -51,11 +52,12 @@ export default defineComponent({
   },
   computed: {
     calendarEvents() {
-      return this.events.map((event) => ({
+      const events = this.events.map((event) => ({
         ...event,
-        style: { backgroundColor: event.color },
         className: event.class,
       }));
+      console.log('Événements finaux:', events);
+      return events;
     },
   },
   watch: {
@@ -122,13 +124,15 @@ export default defineComponent({
             }
           }
 
+          console.log(`Événement: ${title}, Couleur: ${color}, Classe: ${eventClass}`);
+
           return {
             title,
             start,
             end,
             location,
-            color,
             class: eventClass,
+            style: { backgroundColor: color }, // Utilisez directement la couleur comme style inline
           };
         });
 
@@ -137,30 +141,48 @@ export default defineComponent({
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
       }
-    }
+    },
+    cellContent(cell) {
+      console.log('Cell content:', cell);
+      return '';
+    },
   },
 });
 </script>
 
 <style>
-.vuecal__event {
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 5px;
-  margin: 2px;
-  font-size: 14px;
-  color: white;
-  text-align: center;
+.vuecal .vuecal__event {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  padding: 5px !important;
+  margin: 2px !important;
+  font-size: 14px !important;
+  color: white !important;
+  text-align: center !important;
 }
 
-.vuecal__event.no-class {
-  background-color: #f0f0f0 !important;
-  color: black;
-}
+.vuecal .vuecal__event[class*="poo"] { background-color: #66FF66 !important; }
+.vuecal .vuecal__event[class*="anglais"] { background-color: #008080 !important; }
+.vuecal .vuecal__event[class*="base-de-donnees"] { background-color: #C0C0C0 !important; color: black !important; }
+.vuecal .vuecal__event[class*="algorithmique-et-programmation-4"] { background-color: #66CCFF !important; }
+.vuecal .vuecal__event[class*="architecture-2"] { background-color: #b52844 !important; }
+.vuecal .vuecal__event[class*="sae-cpp_ctr-td1"] { background-color: #FF6FCF !important; }
+.vuecal .vuecal__event[class*="sae-projet-algo-4-tp-a"] { background-color: #CCFF66 !important; color: black !important; }
+.vuecal .vuecal__event[class*="algo-4-td1"] { background-color: #66CCFF !important; }
+.vuecal .vuecal__event[class*="no-class"] { background-color: #F0F0F0 !important; color: black !important; }
+
 
 .vuecal__event:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
 }
+
+.vuecal__event-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 </style>
+
