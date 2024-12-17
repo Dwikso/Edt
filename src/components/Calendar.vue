@@ -161,8 +161,8 @@ export default defineComponent({
   text-align: center !important;
 }
 
-.vuecal .vuecal__event[class*="poo"] { background-color: #66FF66 !important; }
-.vuecal .vuecal__event[class*="anglais"] { background-color: #008080 !important; }
+.vuecal .vuecal__event[class*="poo"] { background-color: #66FF66 !important; color: black !important; }
+.vuecal .vuecal__event[class*="anglais"] { background-color: #008080 !important; color: black !important;}
 .vuecal .vuecal__event[class*="base-de-donnees"] { background-color: #C0C0C0 !important; color: black !important; }
 .vuecal .vuecal__event[class*="algorithmique-et-programmation-4"] { background-color: #66CCFF !important; }
 .vuecal .vuecal__event[class*="architecture-2"] { background-color: #b52844 !important; }
