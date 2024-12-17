@@ -16,9 +16,8 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent} from 'vue';
+import { defineComponent } from 'vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import ICAL from 'ical.js';
@@ -51,19 +50,13 @@ export default defineComponent({
     };
   },
   computed: {
-    // Générer les événements avec couleurs et classes
     calendarEvents() {
       return this.events.map((event) => ({
         ...event,
-        // Style inline pour la couleur
         style: { backgroundColor: event.color },
-        // Classe CSS dynamique
         className: event.class,
       }));
     },
-  },
-  mounted() {
-    this.loadICSFile(); // Charger le fichier ICS au montage
   },
   watch: {
     icsFilePath: {
@@ -74,26 +67,37 @@ export default defineComponent({
     },
   },
   methods: {
-    // Charger le fichier ICS
+    // Charger le fichier ICS avec gestion des chemins et cache
     async loadICSFile() {
+      const url = `${window.location.origin}${this.icsFilePath}?nocache=${Date.now()}`; // URL absolue avec cache-buster
+      console.log("Trying to fetch ICS file from:", url); // Debug log
+
       try {
-        const response = await fetch(this.icsFilePath);
+        const response = await fetch(url);
+
         if (!response.ok) {
-          throw new Error(`Erreur lors du chargement du fichier : ${this.icsFilePath}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
         const icsContent = await response.text();
-        this.parseICS(icsContent); // Analyser le contenu du fichier ICS
+        console.log("ICS file loaded successfully:", icsContent); // Debug log
+        this.parseICS(icsContent); // Analyse le contenu ICS
       } catch (error) {
-        console.error("Erreur lors du chargement ou de l’analyse du fichier ICS :", error);
+        console.error("Error loading or parsing the ICS file:", error);
       }
     },
 
-    // Analyser le contenu ICS
-    parseICS(icsContent) {
+    // Analyse du contenu ICS
+    parseICS(icsContent: string) {
       try {
+        console.log("Contenu ICS reçu :", icsContent); // Log du contenu brut
+
         const jcalData = ICAL.parse(icsContent);
+        console.log("Données après parsing ICAL :", jcalData); // Log des données parsées
+
         const comp = new ICAL.Component(jcalData);
         const vevents = comp.getAllSubcomponents("vevent");
+        console.log("Événements trouvés :", vevents); // Log des événements extraits
 
         const events = vevents.map((vevent) => {
           const event = new ICAL.Event(vevent);
@@ -102,11 +106,11 @@ export default defineComponent({
           const end = event.endDate.toJSDate();
           const location = event.location || "";
 
-          let color = "#00B5E2"; // Couleur par défaut
-          let eventClass = "no-class"; // Classe CSS par défaut
-          let matched = false;
+          console.log("Événement analysé :", { title, start, end, location }); // Log chaque événement traité
 
-          // Associer des couleurs et des classes
+          let color = "#00B5E2"; // Couleur par défaut
+          let eventClass = "no-class";
+
           for (const subject in this.subjectColors) {
             if (title.toLowerCase().includes(subject.toLowerCase())) {
               color = this.subjectColors[subject];
@@ -114,12 +118,8 @@ export default defineComponent({
                 .toLowerCase()
                 .replace(/[\s]+/g, "-")
                 .replace(/[^\w-]/g, "");
-              matched = true;
               break;
             }
-          }
-          if (!matched) {
-            eventClass = "no-class";
           }
 
           return {
@@ -132,21 +132,17 @@ export default defineComponent({
           };
         });
 
+        console.log("Liste complète des événements :", events); // Log final des événements formatés
         this.events = events;
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
       }
-    },
+    }
   },
 });
 </script>
 
-
 <style>
-
-.vuecal {
-}
-
 .vuecal__event {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -157,66 +153,14 @@ export default defineComponent({
   text-align: center;
 }
 
-
-.vuecal__event.poo {
-  background-color: #66FF66 !important;
-}
-
-.vuecal__event.anglais {
-  background-color: #008080 !important;
-}
-
-.vuecal__event.base_de_donnees {
-  background-color: #C0C0C0 !important;
-  color: black;
-}
-
-.vuecal__event.algorithmique-et-programmation-4 {
-  background-color: #66CCFF !important;
-}
-
-.vuecal__event.architecture-2 {
-  background-color: #b52844 !important;
-}
-
-.vuecal__event.sae-cpp_ctr-td1 {
-  background-color: #FF6FCF !important;
-}
-
-.vuecal__event.sae-projet-algo-4-tp-a {
-  background-color: #CCFF66 !important;
-  color: black;
-}
-
-.vuecal__event.sae-projet-algo-4-tp-b {
-  background-color: #CCFF66 !important;
-  color: black;
-}
-
-.vuecal__event.algo-4-td1 {
-  background-color: #66CCFF !important;
-}
-
 .vuecal__event.no-class {
-  background-color: #F0F0F0 !important;
+  background-color: #f0f0f0 !important;
   color: black;
 }
-
 
 .vuecal__event:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
 }
-
-.vuecal__event-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-
-
 </style>
-
