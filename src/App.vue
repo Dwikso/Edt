@@ -21,17 +21,17 @@ export default defineComponent({
   },
   data() {
     return {
-      selectedFile: 'file1', // Valeur par défaut du select
+      selectedFile: 'file1',
       files: {
         file1: 'public/edt/ADECalGrpA.ics',
         file2: 'public/edt/ADECalGrpB.ics',
       },
-      icsFilePath: 'public/edt/ADECalGrpA.ics', // Chemin du fichier ICS
+      icsFilePath: 'public/edt/ADECalGrpA.ics',
     };
   },
   methods: {
     updateICSFile() {
-      this.icsFilePath = this.files[this.selectedFile]; // Mise à jour du chemin ICS
+      this.icsFilePath = this.files[this.selectedFile];
     },
   },
 });
