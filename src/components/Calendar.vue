@@ -99,12 +99,11 @@ export default defineComponent({
     // Analyse du contenu ICS
     parseICS(icsContent: string) {
       try {
-        console.log("Contenu ICS reçu :", icsContent); // Log du contenu brut
+        console.log("Contenu ICS reçu :", icsContent);
 
         const jcalData = ICAL.parse(icsContent);
         const comp = new ICAL.Component(jcalData);
         const vevents = comp.getAllSubcomponents("vevent");
-        console.log("Événements trouvés :", vevents); // Log des événements extraits
 
         const events = vevents.map((vevent) => {
           const event = new ICAL.Event(vevent);
@@ -114,12 +113,16 @@ export default defineComponent({
           const location = event.location || "";
           const desc = event.description || "";
 
-          // Extraire le nom du professeur depuis la description
-          let professor = "Inconnu";
+          // Extraire le nom du professeur de manière robuste
+          let professor = "";
           const lines = desc.split(/\r?\n/).filter(line => line.trim() !== ""); // Diviser en lignes non vides
-          const exportLineIndex = lines.findIndex(line => line.includes("(Exporté le:")); // Trouver la ligne d'export
-          if (exportLineIndex > 0) {
-            professor = lines[exportLineIndex - 1].trim(); // Prendre la ligne juste avant
+
+          for (const line of lines) {
+            // Vérifier si la ligne correspond à un nom probable
+            if (/^[A-ZÉÈÊÎÔÛÀÂÇ][a-zéèêîôûàâç-]+(?:-[A-ZÉÈÊÎÔÛÀÂÇ][a-zéèêîôûàâç-]+)?\s[A-ZÉÈÊÎÔÛÀÂÇ][a-zéèêîôûàâç-]+(?:-[A-ZÉÈÊÎÔÛÀÂÇ][a-zéèêîôûàâç-]+)?$/.test(line.trim())) {
+              professor = line.trim();
+              break;
+            }
           }
 
           console.log("Événement analysé :", { title, start, end, location, desc, professor });
@@ -151,12 +154,12 @@ export default defineComponent({
           };
         });
 
-        console.log("Liste complète des événements :", events); // Log final des événements formatés
+        console.log("Liste complète des événements :", events);
         this.events = events;
       } catch (error) {
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
       }
-    },
+    }
   },
 });
 </script>
