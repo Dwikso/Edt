@@ -168,6 +168,7 @@ export default defineComponent({
 .vuecal .vuecal__event[class*="architecture-2"] { background-color: #b52844 !important; }
 .vuecal .vuecal__event[class*="sae-cpp_ctr-td1"] { background-color: #FF6FCF !important; }
 .vuecal .vuecal__event[class*="sae-projet-algo-4-tp-a"] { background-color: #CCFF66 !important; color: black !important; }
+.vuecal .vuecal__event[class*="sae-projet-algo-4-tp-b"] { background-color: #CCFF66 !important; color: black !important; }
 .vuecal .vuecal__event[class*="algo-4-td1"] { background-color: #66CCFF !important; }
 .vuecal .vuecal__event[class*="no-class"] { background-color: #F0F0F0 !important; color: black !important; }
 
