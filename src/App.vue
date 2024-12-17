@@ -23,10 +23,10 @@ export default defineComponent({
     return {
       selectedFile: 'file1', // Valeur par défaut du select
       files: {
-        file1: 'edt/ADECalGrpA.ics',
-        file2: 'edt/ADECalGrpB.ics',
+        file1: 'public/edt/ADECalGrpA.ics',
+        file2: 'public/edt/ADECalGrpB.ics',
       },
-      icsFilePath: 'edt/ADECalGrpA.ics', // Chemin du fichier ICS
+      icsFilePath: 'public/edt/ADECalGrpA.ics', // Chemin du fichier ICS
     };
   },
   methods: {

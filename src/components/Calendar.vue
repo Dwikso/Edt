@@ -10,6 +10,8 @@
       :time-from="8 * 60"
       :time-to="19 * 60"
       :time-cell-height="50"
+      :disableViews="['years', 'year', 'month']"
+      active-view="week"
     />
   </div>
 </template>
@@ -40,6 +42,7 @@ export default defineComponent({
         "Base de donnees": "#FFCC66",
         "Algorithmique et Programmation 4": "#66CCFF",
         "SAE Projet Algo 4 TP-A": "#CCFF66",
+        "SAE Projet Algo 4 TP-B": "#CCFF66",
         "Architecture 2 TD1": "#b52844",
         "Architecture 2": "#b52844",
         "SAE CPP_CTR TD1": "#FF6FCF",
@@ -163,7 +166,7 @@ export default defineComponent({
   background-color: #008080 !important;
 }
 
-.vuecal__event.base-de-donnees {
+.vuecal__event.base_de_donnees {
   background-color: #C0C0C0 !important;
   color: black;
 }
@@ -181,6 +184,11 @@ export default defineComponent({
 }
 
 .vuecal__event.sae-projet-algo-4-tp-a {
+  background-color: #CCFF66 !important;
+  color: black;
+}
+
+.vuecal__event.sae-projet-algo-4-tp-b {
   background-color: #CCFF66 !important;
   color: black;
 }
