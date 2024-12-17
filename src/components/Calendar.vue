@@ -8,7 +8,7 @@
       hide-weekends
       :time-from="8 * 60"
       :time-to="19 * 60"
-      :time-cell-height="60"
+      :time-cell-height="70"
       :disableViews="['years', 'year', 'month']"
       active-view="week"
     >
@@ -16,7 +16,8 @@
       <template #event="{ event }">
         <div>
           <strong>{{ event.title }}</strong>
-          <div style="font-size: 10px;">Professeur: {{ event.professor }}</div>
+          <div style="font-size: 13px;"> {{ event.professor }}</div>
+          <div style="font-size: 13px;">Salle: {{ event.location }}</div>
         </div>
       </template>
     </vue-cal>
