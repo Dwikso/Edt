@@ -151,12 +151,25 @@ export default defineComponent({
 </script>
 
 <style>
+
+h1{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.vuecal {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .vuecal .vuecal__event {
   border-radius: 8px !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-  padding: 5px !important;
+  padding: 3px !important;
   margin: 2px !important;
-  font-size: 14px !important;
+  font-size: 12px !important;
   color: white !important;
   text-align: center !important;
 }
@@ -185,5 +198,41 @@ export default defineComponent({
   align-items: center;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .vuecal .vuecal__event {
+    font-size: 10px !important;
+    padding: 2px;
+  }
+
+  h1 {
+    font-size: 12px !important;
+  }
+  .vuecal {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vuecal {
+    font-size: 10px;
+  }
+
+  h1 {
+    font-size: 16px !important;
+  }
+
+  .vuecal .vuecal__event {
+    font-size: 9px !important;
+    padding: 1px !important;
+  }
+
+  .vuecal__body {
+    overflow-x: auto ;
+  }
+
+
+}
+
 </style>
 
