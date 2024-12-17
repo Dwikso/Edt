@@ -1,6 +1,0 @@
-{
-  "public": "public",
-  "routes": [
-    { "src": "/edt/(.*)", "dest": "/public/edt/$1" }
-  ]
-}
