@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>Emploi du Temps</h1>
-    <!-- VueCal avec les événements -->
     <vue-cal
       :events="calendarEvents"
       locale="fr"
@@ -9,11 +8,18 @@
       hide-weekends
       :time-from="8 * 60"
       :time-to="19 * 60"
-      :time-cell-height="50"
+      :time-cell-height="60"
       :disableViews="['years', 'year', 'month']"
       active-view="week"
-      :cell-content="cellContent"
-    />
+    >
+      <!-- Slot pour personnaliser l'affichage des événements -->
+      <template #event="{ event }">
+        <div>
+          <strong>{{ event.title }}</strong>
+          <div style="font-size: 10px;">Professeur: {{ event.professor }}</div>
+        </div>
+      </template>
+    </vue-cal>
   </div>
 </template>
 
@@ -95,8 +101,6 @@ export default defineComponent({
         console.log("Contenu ICS reçu :", icsContent); // Log du contenu brut
 
         const jcalData = ICAL.parse(icsContent);
-        console.log("Données après parsing ICAL :", jcalData); // Log des données parsées
-
         const comp = new ICAL.Component(jcalData);
         const vevents = comp.getAllSubcomponents("vevent");
         console.log("Événements trouvés :", vevents); // Log des événements extraits
@@ -107,10 +111,20 @@ export default defineComponent({
           const start = event.startDate.toJSDate();
           const end = event.endDate.toJSDate();
           const location = event.location || "";
+          const desc = event.description || "";
 
-          console.log("Événement analysé :", { title, start, end, location }); // Log chaque événement traité
+          // Extraire le nom du professeur depuis la description
+          let professor = "Inconnu";
+          const lines = desc.split(/\r?\n/).filter(line => line.trim() !== ""); // Diviser en lignes non vides
+          const exportLineIndex = lines.findIndex(line => line.includes("(Exporté le:")); // Trouver la ligne d'export
+          if (exportLineIndex > 0) {
+            professor = lines[exportLineIndex - 1].trim(); // Prendre la ligne juste avant
+          }
 
-          let color = "#00B5E2"; // Couleur par défaut
+          console.log("Événement analysé :", { title, start, end, location, desc, professor });
+
+          // Définir la couleur et la classe en fonction des matières
+          let color = "#00B5E2"; // Default color
           let eventClass = "no-class";
 
           for (const subject in this.subjectColors) {
@@ -124,15 +138,15 @@ export default defineComponent({
             }
           }
 
-          console.log(`Événement: ${title}, Couleur: ${color}, Classe: ${eventClass}`);
-
           return {
-            title,
+            title, // Ajouter le nom du professeur au titre
             start,
             end,
             location,
+            desc,
+            professor, // Ajouter le prof en propre si besoin
             class: eventClass,
-            style: { backgroundColor: color }, // Utilisez directement la couleur comme style inline
+            style: { backgroundColor: color },
           };
         });
 
@@ -142,16 +156,11 @@ export default defineComponent({
         console.error("Erreur lors de l’analyse du contenu ICS :", error);
       }
     },
-    cellContent(cell) {
-      console.log('Cell content:', cell);
-      return '';
-    },
   },
 });
 </script>
 
 <style>
-
 h1{
   display: flex;
   justify-content: center;
@@ -230,9 +239,7 @@ h1{
   .vuecal__body {
     overflow-x: auto ;
   }
-
-
 }
 
-</style>
 
+</style>
