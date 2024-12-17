@@ -23,8 +23,8 @@ export default defineComponent({
     return {
       selectedFile: 'file1',
       files: {
-        file1: 'public/edt/ADECalGrpA.ics',
-        file2: 'public/edt/ADECalGrpB.ics',
+        file1: 'edt/ADECalGrpA.ics',
+        file2: 'edt/ADECalGrpB.ics',
       },
       icsFilePath: 'public/edt/ADECalGrpA.ics',
     };
